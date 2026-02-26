@@ -1,8 +1,10 @@
-#　cepf_sdk/frame.py
+# cepf_sdk/frame.py
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, Any, Optional
-import numpy as np
+
+from cepf_sdk.types import CepfPoints
+
 
 @dataclass(frozen=True)
 class CepfMetadata:
@@ -23,7 +25,6 @@ class CepfFrame:
     version: str
     metadata: CepfMetadata
     schema: Dict[str, Any]
-    points: Dict[str, np.ndarray]
+    points: CepfPoints
     point_count: int
     extensions: Optional[Dict[str, Any]] = None
-

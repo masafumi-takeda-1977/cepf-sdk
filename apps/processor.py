@@ -3,11 +3,14 @@ from __future__ import annotations
 
 import queue
 from dataclasses import dataclass
+from dataclasses import replace
 from typing import Optional
 
 import numpy as np
 
 from cepf_sdk import CepfFrame
+from apps.processing.filters import CylindricalRangeFilter
+
 
 
 @dataclass(frozen=True)
@@ -29,6 +32,11 @@ def processor_loop(
     cfg = config or ProcessorConfig()
     seen = 0
 
+    # 範囲フィルター
+    # 半径10m、高さ30mの円筒形でフィルタリング
+    range_filter = CylindricalRangeFilter(radius_m=10.0, z_min_m=0.0, z_max_m=30.0)
+
+
     while True:
         try:
             frame = frame_queue.get(timeout=1.0)
@@ -37,8 +45,26 @@ def processor_loop(
 
         seen += 1
 
-        fid = int(frame.metadata.frame_id)
+        # 範囲フィルター（監視範囲制限）
+        pts = getattr(frame, "points", None)
+        if pts is None:
+            continue
 
+        filtered_points = range_filter.apply(frame.points)
+        frame = replace(frame, points=filtered_points, point_count=len(filtered_points["x"]))
+
+
+        ###以下、処理が続く
+
+
+        
+
+        
+
+
+        #後段処理例：点群の代表点をprint
+        fid = int(frame.metadata.frame_id)
+        
         # frame_idフィルタ
         if cfg.only_frame_id is not None and fid != int(cfg.only_frame_id):
             continue

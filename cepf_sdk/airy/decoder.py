@@ -10,6 +10,7 @@ from typing import Any, Dict, Iterator, List, Optional, Tuple
 import numpy as np
 
 from cepf_sdk.frame import CepfFrame, CepfMetadata
+from cepf_sdk.types import CepfPoints
 
 
 # -------------------------
@@ -269,20 +270,21 @@ class UdpAiryDecoder:
             return_id = np.full((n,), int(self.cfg.return_id_value), dtype=np.uint8)
 
             # CEPF points
-            points: Dict[str, np.ndarray] = {
-                "x": all_cols["x"],
-                "y": all_cols["y"],
-                "z": all_cols["z"],
-                "azimuth": all_cols["azimuth"],
-                "elevation": all_cols["elevation"],
-                "range": all_cols["range"],
+            points: CepfPoints = {
+                "x": all_cols["x"].astype(np.float32, copy=False),
+                "y": all_cols["y"].astype(np.float32, copy=False),
+                "z": all_cols["z"].astype(np.float32, copy=False),
 
-                "timestamp": timestamp,          # f64
-                "intensity": intensity,          # f32
-                "velocity": velocity,            # f32 (NaN)
-                "confidence": confidence,        # f32
-                "return_id": return_id,          # u8
-                "flags": flags,                  # u16
+                "azimuth": all_cols["azimuth"].astype(np.float32, copy=False),
+                "elevation": all_cols["elevation"].astype(np.float32, copy=False),
+                "range": all_cols["range"].astype(np.float32, copy=False),
+
+                "timestamp": timestamp,                  # f64
+                "intensity": intensity,                  # f32
+                "velocity": velocity,                    # f32
+                "confidence": confidence,                # f32
+                "return_id": return_id,                  # u8
+                "flags": flags,                          # u16
             }
 
             schema = {
