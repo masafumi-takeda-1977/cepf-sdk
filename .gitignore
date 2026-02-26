@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# venv
+.venv/
+
+# VSCode local
+.vscode/*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ROS logs
+.ros/
+logs/
