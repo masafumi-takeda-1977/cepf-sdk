@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cepf-sdk"
+version = "0.1.0"
+description = "CEPF SDK (local) with Airy UDP decoder"
+requires-python = ">=3.10"
+dependencies = ["numpy"]
+
+[tool.setuptools]
+packages = ["cepf_sdk", "cepf_sdk.airy"]
